@@ -136,38 +136,6 @@ main {
     pointer-events: none;
 }
 
-.keyboard {
-    margin-top: 40px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    align-items: center;
-}
-
-.keyboard-row {
-    display: flex;
-    gap: 6px;
-}
-
-.key {
-    width: 40px;
-    height: 40px;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--sub-color);
-}
-
-.key.active {
-    background-color: var(--main-color);
-    color: var(--bg-color);
-}
-
-.key.space {
-    width: 200px;
-}
 
 .restart {
     position: fixed;
@@ -184,7 +152,6 @@ main {
     color: var(--text-color);
 }
 
-/* Results screen styles */
 .results {
     position: fixed;
     top: 0;
@@ -238,12 +205,7 @@ main {
     color: var(--sub-color);
 }
 
-/* .graph-container {
-    width: 80%;
-    height: 200px;
-    margin: 30px 0;
-    position: relative;
-} */
+
 
 .graph {
     width: 80%;

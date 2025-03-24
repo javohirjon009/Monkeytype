@@ -8,7 +8,6 @@ const wordList = [
     'people', 'into', 'year', 'your', 'good', 'some', 'could', 'them', 'see', 'other'
 ];
 
-// DOM elements
 const wordsElement = document.getElementById('words');
 const inputElement = document.getElementById('input');
 const caretElement = document.getElementById('caret');
@@ -23,7 +22,7 @@ const timeTakenElement = document.getElementById('time-taken');
 const testTypeElement = document.getElementById('test-type');
 const graphElement = document.getElementById('graph');
 
-// Variables
+
 let words = [];
 let currentWordIndex = 0;
 let currentLetterIndex = 0;
@@ -38,7 +37,7 @@ let extraChars = 0;
 let wpmHistory = [];
 let lastRecordedTime = 0;
 
-// Generate random words
+
 function generateWords(count = 100) {
     const randomWords = [];
     for (let i = 0; i < count; i++) {
@@ -48,7 +47,7 @@ function generateWords(count = 100) {
     return randomWords;
 }
 
-// Initialize words display
+
 function initWords() {
     words = generateWords();
     wordsElement.innerHTML = '';
@@ -69,11 +68,10 @@ function initWords() {
         wordsElement.appendChild(wordSpan);
     });
     
-    // Show caret at first letter
     updateCaret();
 }
 
-// Update caret position
+
 function updateCaret() {
     const currentWord = document.querySelector(`.word[data-word-index="${currentWordIndex}"]`);
     if (!currentWord) return;
@@ -87,7 +85,7 @@ function updateCaret() {
         caretElement.style.left = (rect.left - wordsRect.left) + 'px';
         caretElement.style.top = (rect.top - wordsRect.top) + 'px';
     } else {
-        // Caret at end of word
+     
         const lastLetter = currentWord.children[currentWord.children.length - 1];
         if (lastLetter) {
             const rect = lastLetter.getBoundingClientRect();
@@ -100,7 +98,6 @@ function updateCaret() {
     }
 }
 
-// Start the test
 function startTest() {
     if (testActive) return;
     
@@ -113,7 +110,6 @@ function startTest() {
     missedChars = 0;
     extraChars = 0;
     
-    // Record WPM every second for the graph
     const wpmRecorder = setInterval(() => {
         if (!testActive) {
             clearInterval(wpmRecorder);
@@ -142,19 +138,16 @@ function startTest() {
     }, 1000);
 }
 
-// End the test
 function endTest() {
     testActive = false;
     clearInterval(timerInterval);
     
-    // Calculate statistics
     const elapsedMinutes = (new Date() - startTime) / 60000;
     const wpm = Math.round((correctChars / 5) / elapsedMinutes);
     const raw = Math.round(((correctChars + incorrectChars) / 5) / elapsedMinutes);
     const totalChars = correctChars + incorrectChars;
     const accuracy = totalChars > 0 ? Math.round((correctChars / totalChars) * 100) : 0;
     
-    // Calculate consistency
     let consistency = 0;
     if (wpmHistory.length > 0) {
         const avg = wpmHistory.reduce((sum, wpm) => sum + wpm, 0) / wpmHistory.length;
@@ -164,7 +157,6 @@ function endTest() {
         consistency = Math.max(0, Math.min(100, Math.round(100 - (stdDev / avg * 100))));
     }
     
-    // Update results
     wpmElement.textContent = wpm;
     accuracyElement.textContent = accuracy;
     rawElement.textContent = raw;
@@ -173,14 +165,12 @@ function endTest() {
     timeTakenElement.textContent = `${testTime}s`;
     testTypeElement.textContent = `time ${testTime}`;
     
-    // Create graph
     createGraph();
     
-    // Show results
     resultsElement.classList.add('active');
 }
 
-// Create WPM graph
+
 function createGraph() {
     graphElement.innerHTML = '';
     
@@ -201,7 +191,7 @@ function createGraph() {
     });
 }
 
-// Reset the test
+
 function resetTest() {
     currentWordIndex = 0;
     currentLetterIndex = 0;
@@ -217,12 +207,12 @@ function resetTest() {
     focusInput();
 }
 
-// Set test time
+
 function setTime(time) {
     testTime = time;
     timerElement.textContent = time;
     
-    // Update active class
+
     document.querySelectorAll('.config-option').forEach(option => {
         option.classList.remove('active');
         if (option.textContent == time) {
@@ -233,12 +223,11 @@ function setTime(time) {
     resetTest();
 }
 
-// Focus input
+
 function focusInput() {
     inputElement.focus();
 }
 
-// Handle input
 inputElement.addEventListener('input', (e) => {
     if (!testActive && e.target.value.length > 0) {
         startTest();
@@ -249,9 +238,9 @@ inputElement.addEventListener('input', (e) => {
     const currentWord = words[currentWordIndex];
     const typedValue = e.target.value;
     
-    // If space is pressed, move to next word
+  
     if (typedValue.endsWith(' ')) {
-        // Count correct and incorrect characters
+   
         for (let i = 0; i < Math.max(typedValue.length - 1, currentWord.length); i++) {
             if (i < typedValue.length - 1 && i < currentWord.length) {
                 if (typedValue[i] === currentWord[i]) {
@@ -260,10 +249,10 @@ inputElement.addEventListener('input', (e) => {
                     incorrectChars++;
                 }
             } else if (i >= typedValue.length - 1) {
-                // Missed characters
+              
                 missedChars++;
             } else {
-                // Extra characters
+                
                 extraChars++;
             }
         }
@@ -281,18 +270,17 @@ inputElement.addEventListener('input', (e) => {
         return;
     }
     
-    // Update letter highlighting
+  
     const wordElement = document.querySelector(`.word[data-word-index="${currentWordIndex}"]`);
     if (!wordElement) return;
     
     const letters = wordElement.querySelectorAll('.letter');
     
-    // Reset all letters in current word
     letters.forEach(letter => {
         letter.classList.remove('correct', 'incorrect');
     });
     
-    // Highlight typed letters
+
     for (let i = 0; i < typedValue.length; i++) {
         if (i < letters.length) {
             if (typedValue[i] === currentWord[i]) {
@@ -307,30 +295,9 @@ inputElement.addEventListener('input', (e) => {
     updateCaret();
 });
 
-// Handle keyboard highlighting
-document.addEventListener('keydown', (e) => {
-    const key = e.key.toLowerCase();
-    const keyElement = document.querySelector(`.key[data-key="${key}"]`);
-    
-    if (keyElement) {
-        keyElement.classList.add('active');
-    }
-});
-
-document.addEventListener('keyup', (e) => {
-    const key = e.key.toLowerCase();
-    const keyElement = document.querySelector(`.key[data-key="${key}"]`);
-    
-    if (keyElement) {
-        keyElement.classList.remove('active');
-    }
-});
-
-// Initialize
 initWords();
 focusInput();
 
-// Handle window resize for graph
 window.addEventListener('resize', () => {
     if (resultsElement.classList.contains('active')) {
         createGraph();
