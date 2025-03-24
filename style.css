@@ -38,6 +38,7 @@ header {
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--main-color);
+    
 }
 
 .config {
@@ -48,7 +49,10 @@ header {
 .config-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 20px;
+    font-size: 40px;
+    margin-right: 170px;
+    margin-top: 50px;
 }
 
 .config-label {
